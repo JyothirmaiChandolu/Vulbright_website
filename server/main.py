@@ -27,7 +27,7 @@ ALLOWED_ORIGINS = [
     "http://localhost:5176",
     "http://localhost:5177",
     # Production — replace with your actual Vercel URL after deploying
-    "https://vercel.com/jyothis-projects-a9d5ff90/vulbright-website",
+    "https://vulbright-website.vercel.app/",
 ]
 
 app.add_middleware(
