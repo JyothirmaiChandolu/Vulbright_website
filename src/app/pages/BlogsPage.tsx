@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'motion/react';
 import { Calendar, Clock, ArrowRight, ChevronUp } from 'lucide-react';
+import { useNavigate } from 'react-router';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 
@@ -310,6 +311,7 @@ function Newsletter() {
 }
 
 export default function BlogsPage() {
+  const navigate = useNavigate();
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
   const handleToggle = (id: number) =>
@@ -363,7 +365,7 @@ export default function BlogsPage() {
             <h2 className="text-4xl font-bold text-white mb-4">Get in Touch</h2>
             <p className="text-white/85 text-lg mb-8">Ready to put these insights into action? Let's talk about how we can help your business.</p>
             <button
-              onClick={() => window.location.href = '/contact'}
+              onClick={() => navigate('/contact')}
               className="px-8 py-4 bg-white text-[var(--brand-green)] rounded-lg font-bold hover:bg-gray-100 transition-colors duration-300 shadow-lg"
             >
               Contact Us

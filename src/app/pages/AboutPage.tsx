@@ -368,6 +368,7 @@ function GalleryCarousel() {
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function AboutPage() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-white relative">
       <Header />
@@ -516,7 +517,7 @@ export default function AboutPage() {
             <h2 className="text-4xl font-bold text-white mb-4">Get in Touch</h2>
             <p className="text-white/85 text-lg mb-8">Have a project in mind or want to learn more about Vulbright? We'd love to hear from you.</p>
             <button
-              onClick={() => window.location.href = '/contact'}
+              onClick={() => navigate('/contact')}
               className="px-8 py-4 bg-white text-[var(--brand-green)] rounded-lg font-bold hover:bg-gray-100 transition-colors duration-300 shadow-lg"
             >
               Contact Us
