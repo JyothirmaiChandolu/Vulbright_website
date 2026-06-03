@@ -84,7 +84,7 @@ function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
       fd.append('phone', form.phone);
       fd.append('consent', String(consent));
       fd.append('resume', resumeFile);
-      const res = await fetch('http://localhost:3001/api/applications', { method: 'POST', body: fd });
+      const res = await fetch('${import.meta.env.VITE_API_URL}/api/applications', { method: 'POST', body: fd });
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.detail || 'Submission failed.');
@@ -411,7 +411,7 @@ export default function CareersPage() {
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/jobs')
+    fetch(`${import.meta.env.VITE_API_URL}/api/jobs`)
       .then((r) => r.json())
       .then((data) => setJobs(data))
       .catch(() => setJobs([]))

@@ -20,9 +20,19 @@ def root():
 def favicon():
     return Response(status_code=204)
 
+ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:5175",
+    "http://localhost:5176",
+    "http://localhost:5177",
+    # Production — replace with your actual Vercel URL after deploying
+    "https://vercel.com/jyothis-projects-a9d5ff90/vulbright-website",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:5176", "http://localhost:5177"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["POST", "GET"],
     allow_headers=["Content-Type"],
 )
