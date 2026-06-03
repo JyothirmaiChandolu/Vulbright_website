@@ -67,10 +67,6 @@ function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.phone && form.phone.replace(/\D/g, '').length !== 10) {
-      setErrorMsg('Phone number must be 10 digits.');
-      return;
-    }
     if (!resumeFile) { setErrorMsg('Please upload your resume.'); return; }
     setStatus('loading');
     setErrorMsg('');
@@ -84,16 +80,16 @@ function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
       fd.append('phone', form.phone);
       fd.append('consent', String(consent));
       fd.append('resume', resumeFile);
-      const res = await fetch('${import.meta.env.VITE_API_URL}/api/applications', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/applications`, { method: 'POST', body: fd });
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.detail || 'Submission failed.');
+        let msg = 'Submission failed. Please try again.';
+        try { const data = await res.json(); msg = data.detail || msg; } catch {}
+        throw new Error(msg);
       }
       setStatus('success');
     } catch (err) {
       setStatus('error');
       setErrorMsg(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
-      setStatus('error');
     }
   };
 
