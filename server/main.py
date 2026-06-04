@@ -1,3 +1,6 @@
+import os
+import json
+import shutil
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
@@ -5,10 +8,8 @@ from pydantic import BaseModel, EmailStr
 from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
-import openpyxl
-import sqlite3
-import json
-import shutil
+import psycopg2
+import psycopg2.extras
 
 app = FastAPI()
 
@@ -26,7 +27,6 @@ ALLOWED_ORIGINS = [
     "http://localhost:5175",
     "http://localhost:5176",
     "http://localhost:5177",
-    # Production — replace with your actual Vercel URL after deploying
     "https://vulbright-website.vercel.app",
 ]
 
@@ -37,16 +37,11 @@ app.add_middleware(
     allow_headers=["Content-Type"],
 )
 
-DATA_DIR = Path(__file__).parent / "data"
-EXCEL_FILE = DATA_DIR / "contacts.xlsx"
-DB_FILE = DATA_DIR / "vulbright.db"
-RESUMES_DIR = DATA_DIR / "resumes"
-SHEET_NAME = "Contacts"
-HEADERS = ["Name", "Email", "Message", "Submitted At"]
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
+RESUMES_DIR = Path(__file__).parent / "data" / "resumes"
 
 JOBS_SEED = [
     {
-        "id": 1,
         "title": "Senior Cloud Architect",
         "department": "Cloud & Infrastructure",
         "location": "Spring, TX / Remote",
@@ -60,7 +55,6 @@ JOBS_SEED = [
         ]),
     },
     {
-        "id": 2,
         "title": "Machine Learning Engineer",
         "department": "AI & Data",
         "location": "Spring, TX / Remote",
@@ -74,7 +68,6 @@ JOBS_SEED = [
         ]),
     },
     {
-        "id": 3,
         "title": "Data Engineer",
         "department": "Data Engineering",
         "location": "Remote",
@@ -88,7 +81,6 @@ JOBS_SEED = [
         ]),
     },
     {
-        "id": 4,
         "title": "Full Stack Developer",
         "department": "Software Development",
         "location": "Spring, TX / Remote",
@@ -102,7 +94,6 @@ JOBS_SEED = [
         ]),
     },
     {
-        "id": 5,
         "title": "Digital Transformation Consultant",
         "department": "Consulting",
         "location": "Spring, TX",
@@ -119,18 +110,18 @@ JOBS_SEED = [
 
 
 def get_db():
-    conn = sqlite3.connect(DB_FILE)
-    conn.row_factory = sqlite3.Row
+    conn = psycopg2.connect(DATABASE_URL)
     return conn
 
 
 def init_db():
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
     RESUMES_DIR.mkdir(parents=True, exist_ok=True)
     conn = get_db()
-    conn.execute("""
+    cur = conn.cursor()
+
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS jobs (
-            id INTEGER PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             title TEXT NOT NULL,
             department TEXT NOT NULL,
             location TEXT NOT NULL,
@@ -140,9 +131,9 @@ def init_db():
             is_active INTEGER DEFAULT 1
         )
     """)
-    conn.execute("""
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS applications (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             job_id INTEGER NOT NULL,
             job_title TEXT NOT NULL,
             first_name TEXT NOT NULL,
@@ -154,61 +145,45 @@ def init_db():
             submitted_at TEXT NOT NULL
         )
     """)
-    conn.execute("""
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS contacts (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             name TEXT NOT NULL,
             email TEXT NOT NULL,
             message TEXT NOT NULL,
             submitted_at TEXT NOT NULL
         )
     """)
-    conn.execute("""
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS newsletter_subscriptions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             email TEXT NOT NULL UNIQUE,
             subscribed_at TEXT NOT NULL
         )
     """)
-    count = conn.execute("SELECT COUNT(*) FROM jobs").fetchone()[0]
-    if count == 0:
+
+    cur.execute("SELECT COUNT(*) FROM jobs")
+    if cur.fetchone()[0] == 0:
         for job in JOBS_SEED:
-            conn.execute(
-                "INSERT INTO jobs (id, title, department, location, type, description, requirements) VALUES (?,?,?,?,?,?,?)",
-                (job["id"], job["title"], job["department"], job["location"], job["type"], job["description"], job["requirements"]),
+            cur.execute(
+                "INSERT INTO jobs (title, department, location, type, description, requirements) VALUES (%s,%s,%s,%s,%s,%s)",
+                (job["title"], job["department"], job["location"], job["type"], job["description"], job["requirements"]),
             )
+
     conn.commit()
+    cur.close()
     conn.close()
 
 
 init_db()
 
 
-# ── Contact form (Excel) ──────────────────────────────────────────────────────
+# ── Contact form ──────────────────────────────────────────────────────────────
 
 class ContactForm(BaseModel):
     name: str
     email: EmailStr
     message: str
-
-
-def get_workbook():
-    if EXCEL_FILE.exists():
-        wb = openpyxl.load_workbook(EXCEL_FILE)
-        ws = wb[SHEET_NAME] if SHEET_NAME in wb.sheetnames else _new_sheet(wb)
-    else:
-        DATA_DIR.mkdir(parents=True, exist_ok=True)
-        wb = openpyxl.Workbook()
-        ws = wb.active
-        ws.title = SHEET_NAME
-        ws.append(HEADERS)
-    return wb, wb[SHEET_NAME]
-
-
-def _new_sheet(wb):
-    ws = wb.create_sheet(SHEET_NAME)
-    ws.append(HEADERS)
-    return ws
 
 
 @app.post("/api/contact")
@@ -217,15 +192,19 @@ def submit_contact(form: ContactForm):
         raise HTTPException(status_code=400, detail="All fields are required.")
     submitted_at = datetime.now(ZoneInfo("America/Chicago")).strftime("%Y-%m-%d %H:%M:%S %Z")
     conn = get_db()
-    conn.execute(
-        "INSERT INTO contacts (name, email, message, submitted_at) VALUES (?,?,?,?)",
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO contacts (name, email, message, submitted_at) VALUES (%s,%s,%s,%s)",
         (form.name.strip(), form.email.strip(), form.message.strip(), submitted_at),
     )
     conn.commit()
+    cur.close()
     conn.close()
     print(f"[contact] saved: {form.name} <{form.email}>")
     return {"success": True}
 
+
+# ── Newsletter ────────────────────────────────────────────────────────────────
 
 class NewsletterForm(BaseModel):
     email: EmailStr
@@ -235,15 +214,18 @@ class NewsletterForm(BaseModel):
 def subscribe_newsletter(form: NewsletterForm):
     subscribed_at = datetime.now(ZoneInfo("America/Chicago")).strftime("%Y-%m-%d %H:%M:%S %Z")
     conn = get_db()
-    existing = conn.execute("SELECT id FROM newsletter_subscriptions WHERE email = ?", (form.email.strip(),)).fetchone()
-    if existing:
+    cur = conn.cursor()
+    cur.execute("SELECT id FROM newsletter_subscriptions WHERE email = %s", (form.email.strip(),))
+    if cur.fetchone():
+        cur.close()
         conn.close()
         return {"success": True, "already_subscribed": True}
-    conn.execute(
-        "INSERT INTO newsletter_subscriptions (email, subscribed_at) VALUES (?,?)",
+    cur.execute(
+        "INSERT INTO newsletter_subscriptions (email, subscribed_at) VALUES (%s,%s)",
         (form.email.strip(), subscribed_at),
     )
     conn.commit()
+    cur.close()
     conn.close()
     print(f"[newsletter] subscribed: {form.email}")
     return {"success": True, "already_subscribed": False}
@@ -254,7 +236,10 @@ def subscribe_newsletter(form: NewsletterForm):
 @app.get("/api/jobs")
 def get_jobs():
     conn = get_db()
-    rows = conn.execute("SELECT * FROM jobs WHERE is_active = 1 ORDER BY id").fetchall()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute("SELECT * FROM jobs WHERE is_active = 1 ORDER BY id")
+    rows = cur.fetchall()
+    cur.close()
     conn.close()
     return [
         {
@@ -295,11 +280,35 @@ async def submit_application(
         resume_filename = safe_name
 
     conn = get_db()
-    conn.execute(
-        "INSERT INTO applications (job_id, job_title, first_name, last_name, email, phone, consent, resume_filename, submitted_at) VALUES (?,?,?,?,?,?,?,?,?)",
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO applications (job_id, job_title, first_name, last_name, email, phone, consent, resume_filename, submitted_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
         (job_id, job_title, first_name.strip(), last_name.strip(), email.strip(), phone.strip(), 1 if consent == "true" else 0, resume_filename, submitted_at),
     )
     conn.commit()
+    cur.close()
     conn.close()
     print(f"[application] {first_name} {last_name} <{email}> → {job_title}")
     return {"success": True}
+
+
+# ── Admin data viewer ─────────────────────────────────────────────────────────
+
+ADMIN_SECRET = "vulbright-admin-2026"
+
+@app.get("/api/admin/data")
+def admin_data(key: str = ""):
+    if key != ADMIN_SECRET:
+        raise HTTPException(status_code=403, detail="Forbidden.")
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    contacts = cur.execute("SELECT * FROM contacts ORDER BY id DESC") or cur.fetchall()
+    cur.execute("SELECT * FROM contacts ORDER BY id DESC")
+    contacts = [dict(r) for r in cur.fetchall()]
+    cur.execute("SELECT * FROM newsletter_subscriptions ORDER BY id DESC")
+    newsletter = [dict(r) for r in cur.fetchall()]
+    cur.execute("SELECT * FROM applications ORDER BY id DESC")
+    applications = [dict(r) for r in cur.fetchall()]
+    cur.close()
+    conn.close()
+    return {"contacts": contacts, "newsletter_subscriptions": newsletter, "applications": applications}
