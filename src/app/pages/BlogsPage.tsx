@@ -274,7 +274,7 @@ export default function BlogsPage() {
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
-  const [visible, setVisible] = useState(PAGE_SIZE);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/blogs`)
@@ -286,7 +286,14 @@ export default function BlogsPage() {
   const handleToggle = (id: number) =>
     setExpandedId((prev) => (prev === id ? null : id));
 
-  const shown = blogs.slice(0, visible);
+  const totalPages = Math.ceil(blogs.length / PAGE_SIZE);
+  const shown = blogs.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  const goToPage = (p: number) => {
+    setPage(p);
+    setExpandedId(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="min-h-screen bg-white relative">
@@ -331,13 +338,36 @@ export default function BlogsPage() {
                 ))}
               </div>
 
-              {visible < blogs.length && (
-                <div className="flex justify-center mt-12">
+              {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-2 mt-14">
                   <button
-                    onClick={() => setVisible((v) => v + PAGE_SIZE)}
-                    className="px-8 py-3 border-2 border-[var(--brand-green)] text-[var(--brand-green)] font-semibold rounded-lg hover:bg-[var(--brand-green)] hover:text-white transition-colors duration-200"
+                    onClick={() => goToPage(page - 1)}
+                    disabled={page === 1}
+                    className="px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:border-[var(--brand-green)] hover:text-[var(--brand-green)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-200"
                   >
-                    Load More
+                    ← Prev
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                    <button
+                      key={p}
+                      onClick={() => goToPage(p)}
+                      className={`w-10 h-10 rounded-lg font-semibold text-sm transition-colors duration-200 ${
+                        p === page
+                          ? 'bg-[var(--brand-green)] text-white'
+                          : 'border border-gray-200 text-gray-600 hover:border-[var(--brand-green)] hover:text-[var(--brand-green)]'
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  ))}
+
+                  <button
+                    onClick={() => goToPage(page + 1)}
+                    disabled={page === totalPages}
+                    className="px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:border-[var(--brand-green)] hover:text-[var(--brand-green)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-200"
+                  >
+                    Next →
                   </button>
                 </div>
               )}
