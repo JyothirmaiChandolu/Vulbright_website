@@ -5,62 +5,21 @@ import { useNavigate } from 'react-router';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 
-const blogs = [
-  {
-    id: 1,
-    category: 'Privacy & Compliance',
-    title: 'Navigating the Privacy Matrix: Surviving the CCPA Compliance Waves',
-    caption: 'Beyond the Opt-Out Button: What True Data Privacy Looks Like Now.',
-    excerpt:
-      'Data compliance isn\'t just about sticking a long, unreadable legal text block in your footer anymore. The latest updates to the California Consumer Privacy Act (CCPA) change the rules on how companies collect, track, and handle user information. If you\'re running digital systems today, compliance needs to be built directly into your technical architecture.',
-    bullets: [
-      { heading: 'Fixing the Interface Bias', text: 'You can no longer use deceptive "dark patterns" that trick users into consenting to tracking. The design to opt out must be just as prominent and take the exact same number of clicks as opting in.' },
-      { heading: 'The Long Archive Audit', text: 'Consumers now have the right to request years of historical data. If your software can\'t instantly crawl your legacy cloud systems, offline databases, and cold storage to pull an individual\'s data footprint, you are exposed.' },
-      { heading: 'Pulling Back the Curtain on AI', text: 'If you use software algorithms to automatically score users or make decisions without human review, CCPA now requires you to offer a clear explanation of that logic—and give users an absolute right to opt out of automated profiling.' },
-    ],
-    conclusionTitle: 'The Bottom Line',
-    conclusion: 'Compliance isn\'t a legal problem; it\'s a systems infrastructure problem. Winning enterprises are those that build clear data visibility directly into their pipelines from day one.',
-    date: 'May 10, 2025',
-    readTime: '7 min read',
-    image: '/images/blog-privacy.jpg',
-  },
-  {
-    id: 2,
-    category: 'Enterprise Analytics',
-    title: 'Cracking the Enterprise Dashboard: The Mechanics of CEO Performance Analysis',
-    caption: 'Cutting Through Corporate Noise with Hard Execution Data.',
-    excerpt:
-      'Evaluating executive performance has historically been an exercise in subjective board evaluations and delayed quarterly reviews. But when a business needs to pivot quickly, you need to know exactly how effectively your leadership team is deploying resources in real time. Automated CEO Performance Analysis changes that dynamic entirely.',
-    bullets: [
-      { heading: 'Resource Velocity', text: 'How quickly and efficiently capital turns into deployed software assets.' },
-      { heading: 'Pipeline Integrity', text: 'Keeping projections and actual market delivery aligned without missing targets.' },
-      { heading: 'Team Synergy', text: 'Ensuring that high-level executive directives aren\'t lost as they move down to development sprints.' },
-    ],
-    conclusionTitle: '',
-    conclusion: 'By feeding these operational variables into high-speed data analytics dashboards, company boards can stop arguing over vague impressions. Instead, clean data parsing delivers an objective, live view of structural efficiency, making it incredibly simple to optimize enterprise targets.',
-    date: 'April 22, 2025',
-    readTime: '6 min read',
-    image: '/images/blog-analytics.jpg',
-  },
-  {
-    id: 3,
-    category: 'AI & Biology',
-    title: 'Embark on a Journey into Biology\'s Tomorrow: Unveiling the Marvels of AlphaFold!',
-    caption: 'Code Meets Chemistry: How Deep Learning Solved a 50-Year Biological Riddle.',
-    excerpt:
-      'For decades, predicting exactly how a protein chain folds into its three-dimensional shape required years of grueling, expensive laboratory work using X-ray crystallography. Google DeepMind\'s AlphaFold blew those timelines apart, proving that deep neural networks could predict molecular structures with staggering accuracy in just a matter of minutes.',
-    bullets: [
-      { heading: 'Mapping More Than Just Proteins', text: 'The latest iterations move past simple amino-acid strings. We are now seeing architectures predict interactions across DNA, RNA, and complex chemical ligands, giving pharmaceutical labs a massive head start in drug design.' },
-      { heading: 'Spotting Toxic Mutations', text: 'Specialized offshoot models can now analyze tiny genetic variations to predict with high confidence whether specific mutations are benign or likely to cause cellular damage.' },
-      { heading: 'Radical Research Acceleration', text: 'By replacing slow laboratory trial-and-error with high-fidelity predictive modeling, software engineering has effectively compressed decades of biological research into a couple of keystrokes.' },
-    ],
-    conclusionTitle: 'The Future is Computational',
-    conclusion: 'We are moving rapidly toward a world where the next life-saving medicine won\'t just be discovered in a petri dish—it will be compiled, simulated, and optimized directly inside a software repository.',
-    date: 'April 5, 2025',
-    readTime: '8 min read',
-    image: '/images/blog-biology.jpg',
-  },
-];
+interface Blog {
+  id: number;
+  category: string;
+  title: string;
+  caption: string;
+  excerpt: string;
+  bullets: { heading: string; text: string }[];
+  conclusionTitle: string;
+  conclusion: string;
+  date: string;
+  readTime: string;
+  image: string;
+}
+
+const PAGE_SIZE = 7;
 
 function twoSentences(text: string): string {
   const sentences = text.match(/[^.!?]+[.!?]+/g) ?? [];
@@ -73,7 +32,7 @@ function BlogCard({
   isExpanded,
   onToggle,
 }: {
-  blog: typeof blogs[0];
+  blog: Blog;
   index: number;
   isExpanded: boolean;
   onToggle: (id: number) => void;
@@ -165,7 +124,7 @@ function BlogCard({
                   <p className="text-[var(--brand-green)] font-medium italic mb-5 text-base">{blog.caption}</p>
                   <p className="text-gray-600 leading-relaxed mb-6 text-base">{blog.excerpt}</p>
                   <ul className="space-y-4 mb-6">
-                    {blog.bullets.map((b) => (
+                    {blog.bullets.map((b: { heading: string; text: string }) => (
                       <li key={b.heading} className="flex items-start gap-3 text-gray-600 text-sm leading-relaxed">
                         <span className="mt-1.5 w-2 h-2 rounded-full bg-[var(--brand-green)] shrink-0" />
                         <span><span className="font-semibold text-gray-900">{b.heading}:</span> {b.text}</span>
@@ -313,9 +272,21 @@ function Newsletter() {
 export default function BlogsPage() {
   const navigate = useNavigate();
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = useState(PAGE_SIZE);
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/blogs`)
+      .then((r) => r.json())
+      .then((data) => { setBlogs(data); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
 
   const handleToggle = (id: number) =>
     setExpandedId((prev) => (prev === id ? null : id));
+
+  const shown = blogs.slice(0, visible);
 
   return (
     <div className="min-h-screen bg-white relative">
@@ -342,17 +313,36 @@ export default function BlogsPage() {
       {/* Blog posts — vertical stack */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-col gap-12">
-            {blogs.map((blog, i) => (
-              <BlogCard
-                key={blog.id}
-                blog={blog}
-                index={i}
-                isExpanded={expandedId === blog.id}
-                onToggle={handleToggle}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex justify-center py-24">
+              <div className="w-10 h-10 border-4 border-[var(--brand-green)] border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : (
+            <>
+              <div className="flex flex-col gap-12">
+                {shown.map((blog, i) => (
+                  <BlogCard
+                    key={blog.id}
+                    blog={blog}
+                    index={i}
+                    isExpanded={expandedId === blog.id}
+                    onToggle={handleToggle}
+                  />
+                ))}
+              </div>
+
+              {visible < blogs.length && (
+                <div className="flex justify-center mt-12">
+                  <button
+                    onClick={() => setVisible((v) => v + PAGE_SIZE)}
+                    className="px-8 py-3 border-2 border-[var(--brand-green)] text-[var(--brand-green)] font-semibold rounded-lg hover:bg-[var(--brand-green)] hover:text-white transition-colors duration-200"
+                  >
+                    Load More
+                  </button>
+                </div>
+              )}
+            </>
+          )}
 
           <Newsletter />
         </div>
