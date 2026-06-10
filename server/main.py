@@ -28,6 +28,7 @@ ALLOWED_ORIGINS = [
     "http://localhost:5176",
     "http://localhost:5177",
     "https://vulbright-website.vercel.app",
+    "https://main.dfy4lade91bhr.amplifyapp.com",
 ]
 
 app.add_middleware(
