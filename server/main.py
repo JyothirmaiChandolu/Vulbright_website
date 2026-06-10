@@ -1,6 +1,6 @@
 import os
 import json
-import shutil
+import boto3
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
@@ -10,6 +10,9 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 import psycopg2
 import psycopg2.extras
+
+S3_BUCKET = "vulbright-resumes"
+s3_client = boto3.client("s3", region_name="us-east-1")
 
 app = FastAPI()
 
@@ -39,7 +42,6 @@ app.add_middleware(
 )
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "")
-RESUMES_DIR = Path(__file__).parent / "data" / "resumes"
 
 JOBS_SEED = [
     {
@@ -116,7 +118,6 @@ def get_db():
 
 
 def init_db():
-    RESUMES_DIR.mkdir(parents=True, exist_ok=True)
     conn = get_db()
     cur = conn.cursor()
 
@@ -177,6 +178,21 @@ def init_db():
             image_url TEXT NOT NULL DEFAULT '',
             is_active INTEGER DEFAULT 1
         )
+    """)
+
+    cur.execute("""
+        DO $$
+        BEGIN
+            IF NOT EXISTS (
+                SELECT 1 FROM information_schema.table_constraints
+                WHERE constraint_name = 'fk_application_job'
+                AND table_name = 'applications'
+            ) THEN
+                ALTER TABLE applications
+                ADD CONSTRAINT fk_application_job
+                FOREIGN KEY (job_id) REFERENCES jobs(id);
+            END IF;
+        END $$;
     """)
 
     cur.execute("SELECT COUNT(*) FROM jobs")
@@ -343,16 +359,17 @@ async def submit_application(
     consent: str = Form("false"),
     resume: UploadFile = File(None),
 ):
-    submitted_at = datetime.now(ZoneInfo("America/Chicago")).strftime("%Y-%m-%d %H:%M:%S %Z")
+    now = datetime.now(ZoneInfo("America/Chicago"))
+    submitted_at = now.strftime("%Y-%m-%d %H:%M:%S %Z")
     resume_filename = ""
     if resume and resume.filename:
         ext = Path(resume.filename).suffix.lower()
         if ext not in {".pdf", ".doc", ".docx"}:
             raise HTTPException(status_code=400, detail="Only PDF, DOC, or DOCX files are accepted.")
-        safe_name = f"{job_id}_{first_name}_{last_name}_{datetime.now().strftime('%Y%m%d%H%M%S')}{ext}"
-        with open(RESUMES_DIR / safe_name, "wb") as f:
-            shutil.copyfileobj(resume.file, f)
-        resume_filename = safe_name
+        timestamp = now.strftime("%Y%m%d%H%M%S")
+        s3_key = f"Vulbright_Application/{now.year}/{now.strftime('%B')}/{now.strftime('%d')}/{job_id}/{first_name}_{last_name}_{timestamp}{ext}"
+        s3_client.upload_fileobj(resume.file, S3_BUCKET, s3_key)
+        resume_filename = s3_key
 
     conn = get_db()
     cur = conn.cursor()
