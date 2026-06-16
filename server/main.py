@@ -460,6 +460,8 @@ def admin_data(key: str = ""):
     newsletter = [dict(r) for r in cur.fetchall()]
     cur.execute("SELECT * FROM applications ORDER BY id DESC")
     applications = [dict(r) for r in cur.fetchall()]
+    cur.execute("SELECT * FROM blogs ORDER BY id DESC")
+    blogs = [dict(r) for r in cur.fetchall()]
     cur.close()
     conn.close()
-    return {"contacts": contacts, "newsletter_subscriptions": newsletter, "applications": applications}
+    return {"contacts": contacts, "newsletter_subscriptions": newsletter, "applications": applications, "blogs": blogs}

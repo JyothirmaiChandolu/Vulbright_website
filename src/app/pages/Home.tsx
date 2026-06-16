@@ -3,7 +3,6 @@ import { motion } from 'motion/react';
 import { Target, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { NetworkParticles } from '../components/NetworkParticles';
-import { PartnerMarquee } from '../components/PartnerMarquee';
 import { ServiceCard } from '../components/ServiceCard';
 import { IndustrySliderImproved } from '../components/IndustrySliderImproved';
 import { AnimatedTitle } from '../components/AnimatedTitle';
@@ -46,7 +45,6 @@ export default function Home() {
           </div>
         </div>
 
-        <PartnerMarquee />
       </section>
 
       <section id="about-us" className="py-24 bg-gradient-to-br from-emerald-50 via-white to-green-50">

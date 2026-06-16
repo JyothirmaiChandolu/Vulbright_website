@@ -12,3 +12,12 @@
   view data 
   https://vulbright-website.onrender.com/api/admin/data?key=vulbright-admin-2026
   
+
+  Original design system (logo-derived):
+* 🟢 #8DC63F Lime — primary CTA + accent, drawn directly from your logo's molecular nodes. Signals growth, innovation, action.
+* 🟢 #3D5A1F Forest — depth pair for hover states & technical accents. Signals stability, gravitas.
+* ⬛ #1A1A1A Charcoal — primary ink, matches your wordmark. Signals professionalism, premium.
+* ◻️ #4A4A4A Slate — body text. Signals readability, neutrality.
+* ⬜ #F7F8F4 Bone — section breathers. Signals clarity, breathing room.
+* ⬜ #FFFFFF White — clean canvas. Signals trust, transparency.
+* Type pairing: Space Grotesk (headlines), Manrope (body), JetBrains Mono (technical kickers/metadata).
