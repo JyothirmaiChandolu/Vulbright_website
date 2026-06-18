@@ -419,16 +419,15 @@ export default function CareersPage() {
       <Header />
 
       {/* Hero */}
-      <section className="pt-32 pb-20 bg-gradient-to-br from-emerald-50 via-white to-green-50">
+      <section className="pt-20 lg:pt-32 pb-20 bg-gradient-to-br from-emerald-50 via-white to-green-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              style={{ paddingLeft: '2cm' }}
             >
-              <h1 className="text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
                 Join Us
               </h1>
               <p className="text-lg text-gray-700 leading-relaxed mb-8">
@@ -447,9 +446,8 @@ export default function CareersPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="flex justify-center items-end"
-              style={{ paddingLeft: '1cm' }}
             >
-              <div className="w-80 h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-white shadow-2xl mt-12">
+              <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-white shadow-2xl mt-12">
                 <img src="/images/team.jpg" alt="Join Vulbright" className="w-full h-full object-cover" />
               </div>
             </motion.div>

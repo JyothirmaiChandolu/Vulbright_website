@@ -374,7 +374,7 @@ export default function AboutPage() {
       <Header />
 
       {/* Hero + Our Story */}
-      <section className="pt-32 pb-16 bg-gradient-to-br from-emerald-50 via-white to-green-50">
+      <section className="pt-20 lg:pt-32 pb-16 bg-gradient-to-br from-emerald-50 via-white to-green-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           {/* Heading */}
           <motion.div
@@ -383,7 +383,7 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-4">About Us</h1>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">About Us</h1>
             <div className="w-24 h-1 bg-[var(--brand-green)] mx-auto mb-6" />
             <p className="text-xl text-gray-700 max-w-2xl mx-auto">
               Built on expertise, driven by impact, trusted by the world's leading organizations.
@@ -407,7 +407,7 @@ export default function AboutPage() {
               <div className="absolute inset-0 bg-gray-900/65" />
               <div className="relative z-10 p-10 lg:p-14">
                 <p className="text-[var(--brand-green)] font-semibold text-sm uppercase tracking-widest mb-4">Our Story</p>
-                <h2 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
+                <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
                   A decade of turning complexity into clarity.
                 </h2>
                 <div className="w-16 h-1 bg-[var(--brand-green)] mt-8" />
@@ -473,7 +473,7 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               className="text-center"
             >
-              <h2 className="text-5xl font-bold text-gray-900 mb-4">Our Core Values</h2>
+              <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 mb-4">Our Core Values</h2>
               <div className="w-24 h-1 bg-[var(--brand-green)] mx-auto" />
             </motion.div>
           </div>
@@ -495,7 +495,7 @@ export default function AboutPage() {
             className="text-center mb-12"
           >
             <p className="text-[var(--brand-green)] font-semibold text-sm uppercase tracking-widest mb-3">Our Gallery</p>
-            <h2 className="text-5xl font-bold text-gray-900 mb-4">Life at Vulbright</h2>
+            <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 mb-4">Life at Vulbright</h2>
             <div className="w-24 h-1 bg-[var(--brand-green)] mx-auto" />
           </motion.div>
 

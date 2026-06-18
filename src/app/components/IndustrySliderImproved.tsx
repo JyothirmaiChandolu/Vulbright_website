@@ -80,7 +80,6 @@ const industries: Industry[] = [
 ];
 
 const N = industries.length;
-const CARD_W = 420;
 const STEP = 460;
 
 function relPos(idx: number, active: number): number {
@@ -94,9 +93,9 @@ export function IndustrySliderImproved() {
   const nav = (dir: number) => setActive((a) => (a + dir + N) % N);
 
   return (
-    <div className="relative select-none">
+    <div className="relative select-none" style={{ overflowX: 'clip' }}>
 
-      {/* Cards — flex row, centered, no clipping container */}
+      {/* Cards — flex row, centered, clips horizontal overflow without breaking iOS fixed */}
       <div className="flex items-end justify-center" style={{ height: 520, position: 'relative' }}>
         {industries.map((ind, idx) => {
           const rel = relPos(idx, active);
@@ -107,7 +106,7 @@ export function IndustrySliderImproved() {
             <motion.div
               key={idx}
               className="absolute rounded-3xl overflow-hidden bg-white cursor-pointer group"
-              style={{ width: CARD_W }}
+              style={{ width: 'min(420px, calc(100vw - 48px))' }}
               animate={{
                 x: rel * STEP,
                 y: isCenter ? -48 : 0,

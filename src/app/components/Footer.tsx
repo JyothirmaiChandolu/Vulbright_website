@@ -28,7 +28,7 @@ export function Footer() {
                 <button onClick={() => scrollToSection('home')} className="hover:text-[var(--brand-green)] transition-colors duration-300">Home</button>
               </li>
               <li>
-                <button onClick={() => scrollToSection('about-us')} className="hover:text-[var(--brand-green)] transition-colors duration-300">About Us</button>
+                <button onClick={() => navigate('/about')} className="hover:text-[var(--brand-green)] transition-colors duration-300">About Us</button>
               </li>
               <li>
                 <button onClick={() => scrollToSection('industries')} className="hover:text-[var(--brand-green)] transition-colors duration-300">Industries</button>

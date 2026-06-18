@@ -8,6 +8,7 @@ import { services } from '../data/services';
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,9 +25,9 @@ export function Header() {
 
   const scrollToSection = (sectionId: string) => {
     setMobileMenuOpen(false);
+    setMobileServicesOpen(false);
     if (location.pathname !== '/') {
       navigate('/');
-      // After navigation to home, attempt scroll via timeout
       setTimeout(() => {
         document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
       }, 300);
@@ -37,6 +38,7 @@ export function Header() {
 
   const handleNavClick = (link: string) => {
     setMobileMenuOpen(false);
+    setMobileServicesOpen(false);
     if (link === 'Contact Us') { navigate('/contact'); return; }
     if (link === 'About Us') { navigate('/about'); return; }
     if (link === 'Blogs') { navigate('/blogs'); return; }
@@ -51,19 +53,18 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200">
       <div className="absolute inset-0 bg-white/95 backdrop-blur-sm -z-10" />
       <nav className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-28">
+        <div className="flex items-center justify-between h-16 lg:h-28">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <ImageWithFallback
               src={logoImg}
               alt="Vulbright INC"
-              className="h-28 w-auto object-contain"
+              className="h-14 lg:h-28 w-auto object-contain"
               style={{ mixBlendMode: 'multiply' }}
             />
           </div>
 
           {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-8">
-            {/* Home / About Us */}
             {(['Home', 'About Us'] as const).map((link) => (
               <button
                 key={link}
@@ -107,7 +108,6 @@ export function Header() {
               )}
             </div>
 
-            {/* Blogs / Careers */}
             {(['Blogs', 'Careers'] as const).map((link) => (
               <button
                 key={link}
@@ -119,7 +119,6 @@ export function Header() {
               </button>
             ))}
 
-            {/* Contact Us + Get Quote */}
             <button
               onClick={() => handleNavClick('Contact Us')}
               className="text-sm font-medium text-gray-700 hover:text-[var(--brand-green)] transition-colors duration-300 relative group"
@@ -137,7 +136,11 @@ export function Header() {
           </div>
 
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => {
+              const next = !mobileMenuOpen;
+              setMobileMenuOpen(next);
+              if (!next) setMobileServicesOpen(false);
+            }}
             className="lg:hidden p-2 text-gray-700"
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -146,37 +149,37 @@ export function Header() {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-gray-200">
+          <div className="lg:hidden py-4 border-t border-gray-200 bg-white">
             <div className="flex flex-col gap-1">
               {staticLinks.slice(0, 2).map((link) => (
                 <button
                   key={link}
                   onClick={() => handleNavClick(link)}
-                  className="text-sm font-medium text-gray-700 hover:text-[var(--brand-green)] transition-colors duration-300 text-left py-2 px-2"
+                  className="text-sm font-medium text-gray-700 hover:text-[var(--brand-green)] transition-colors duration-300 text-left py-3 px-2"
                 >
                   {link}
                 </button>
               ))}
 
-              {/* Mobile Services */}
+              {/* Mobile Services — uses separate state to avoid desktop dropdown race condition */}
               <div>
                 <button
-                  onClick={() => setServicesOpen((v) => !v)}
-                  className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-[var(--brand-green)] transition-colors duration-300 py-2 px-2 w-full"
+                  onClick={() => setMobileServicesOpen((v) => !v)}
+                  className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-[var(--brand-green)] transition-colors duration-300 py-3 px-2 w-full"
                 >
-                  Services <ChevronDown size={14} className={servicesOpen ? 'rotate-180' : ''} />
+                  Services <ChevronDown size={14} className={`transition-transform duration-200 ${mobileServicesOpen ? 'rotate-180' : ''}`} />
                 </button>
-                {servicesOpen && (
-                  <div className="ml-4 flex flex-col gap-1">
+                {mobileServicesOpen && (
+                  <div className="ml-4 flex flex-col gap-1 pb-1">
                     {services.map((service) => (
                       <button
                         key={service.id}
-                        onClick={() => {
+                        onPointerDown={() => {
                           setMobileMenuOpen(false);
-                          setServicesOpen(false);
+                          setMobileServicesOpen(false);
                           navigate(`/services/${service.id}`);
                         }}
-                        className="text-sm text-gray-600 hover:text-[var(--brand-green)] transition-colors duration-200 text-left py-1.5 px-2"
+                        className="text-sm text-gray-600 hover:text-[var(--brand-green)] transition-colors duration-200 text-left py-2.5 px-2"
                       >
                         {service.title}
                       </button>
@@ -189,7 +192,7 @@ export function Header() {
                 <button
                   key={link}
                   onClick={() => handleNavClick(link)}
-                  className="text-sm font-medium text-gray-700 hover:text-[var(--brand-green)] transition-colors duration-300 text-left py-2 px-2"
+                  className="text-sm font-medium text-gray-700 hover:text-[var(--brand-green)] transition-colors duration-300 text-left py-3 px-2"
                 >
                   {link}
                 </button>

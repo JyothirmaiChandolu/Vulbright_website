@@ -199,8 +199,8 @@ export default function ServicePage() {
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          onClick={() => navigate(-1)}
-          className="absolute top-36 left-6 lg:left-10 z-10 flex items-center gap-2 text-white/70 hover:text-white transition-colors"
+          onClick={() => navigate('/')}
+          className="absolute top-20 lg:top-36 left-4 lg:left-10 z-20 flex items-center gap-2 text-white/70 hover:text-white transition-colors p-3 -m-3"
         >
           <ArrowLeft size={20} /> Back
         </motion.button>
@@ -215,7 +215,7 @@ export default function ServicePage() {
             <p className="text-[var(--brand-green)] font-semibold text-sm uppercase tracking-widest mb-4">
               {service.tagline}
             </p>
-            <h1 className="text-5xl lg:text-6xl font-bold text-white mb-5 max-w-2xl leading-tight">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-5 max-w-2xl leading-tight">
               {service.title}
             </h1>
             <div className="w-16 h-1 bg-[var(--brand-green)] mb-5" />

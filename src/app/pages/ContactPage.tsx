@@ -9,7 +9,7 @@ const MAPS_QUERY = '20008+Champion+Forest+Dr,+Ste+403,+Spring,+TX+77379';
 
 function OfficeMap() {
   return (
-    <div className="rounded-2xl overflow-hidden shadow-xl border border-gray-200" style={{ height: '480px' }}>
+    <div className="rounded-2xl overflow-hidden shadow-xl border border-gray-200 h-64 sm:h-80 lg:h-[480px]">
       <iframe
         src={`https://maps.google.com/maps?q=${MAPS_QUERY}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
         width="100%"
@@ -57,7 +57,7 @@ export default function ContactPage() {
       <Header />
 
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-gradient-to-br from-emerald-50 via-white to-green-50">
+      <section className="pt-20 lg:pt-32 pb-16 bg-gradient-to-br from-emerald-50 via-white to-green-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -65,7 +65,7 @@ export default function ContactPage() {
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-4">Contact Us</h1>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">Contact Us</h1>
             <div className="w-24 h-1 bg-[var(--brand-green)] mx-auto mb-6"></div>
             <p className="text-xl text-gray-700 max-w-2xl mx-auto">
               No Automated Wait Times. Let's Talk Tech Directly.

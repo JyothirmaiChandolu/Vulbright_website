@@ -243,7 +243,7 @@ function Newsletter() {
           ) : (
             <>
               {status === 'error' && <p className="text-red-500 text-sm mb-3">{message}</p>}
-              <form onSubmit={handleSubmit} className="flex gap-2 mb-8">
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 mb-8">
                 <input
                   type="email"
                   required
@@ -300,7 +300,7 @@ export default function BlogsPage() {
       <Header />
 
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-gradient-to-br from-emerald-50 via-white to-green-50">
+      <section className="pt-20 lg:pt-32 pb-16 bg-gradient-to-br from-emerald-50 via-white to-green-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -308,7 +308,7 @@ export default function BlogsPage() {
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-4">Our Blog</h1>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">Our Blog</h1>
             <div className="w-24 h-1 bg-[var(--brand-green)] mx-auto mb-6" />
             <p className="text-xl text-gray-700 max-w-2xl mx-auto">
               Expert perspectives on cloud, AI, data, and digital transformation.

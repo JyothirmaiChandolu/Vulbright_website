@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      <section id="home" className="min-h-screen pt-28 relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-green-50">
+      <section id="home" className="min-h-screen pt-16 lg:pt-28 relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-green-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[calc(100vh-200px)]">
             <motion.div
@@ -38,7 +38,7 @@ export default function Home() {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="h-[500px]"
+              className="hidden lg:block h-[500px]"
             >
               <NetworkParticles />
             </motion.div>
@@ -56,7 +56,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl font-bold text-gray-900 mb-4">Our Purpose</h2>
+            <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 mb-4">Our Purpose</h2>
             <div className="w-24 h-1 bg-[var(--brand-green)] mx-auto"></div>
           </motion.div>
 
@@ -136,7 +136,7 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="text-center"
             >
-              <h2 className="text-5xl font-bold text-gray-900 mb-4">Our Services</h2>
+              <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 mb-4">Our Services</h2>
               <div className="w-24 h-1 bg-[var(--brand-green)] mx-auto mb-6"></div>
               <p className="text-xl text-gray-700 max-w-3xl mx-auto">
                 Comprehensive technology solutions tailored to your business needs
@@ -197,7 +197,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl font-bold text-gray-900 mb-4">Industries We Serve</h2>
+            <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 mb-4">Industries We Serve</h2>
             <div className="w-24 h-1 bg-[var(--brand-green)] mx-auto mb-4"></div>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto">
               Delivering specialized solutions across diverse sectors

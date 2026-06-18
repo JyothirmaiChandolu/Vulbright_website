@@ -20,7 +20,7 @@ export function AnimatedTitle() {
   }, []);
 
   return (
-    <div className="h-[240px] mb-6 flex items-start">
+    <div className="h-[160px] sm:h-[200px] lg:h-[240px] mb-6 flex items-start">
       <AnimatePresence mode="wait">
         <motion.h1
           key={currentIndex}
@@ -28,7 +28,7 @@ export function AnimatedTitle() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.6, ease: 'easeInOut' }}
-          className="text-6xl font-bold text-gray-900 leading-tight"
+          className="text-3xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight"
         >
           <span className="text-[var(--brand-green)]">
             {titles[currentIndex]}
