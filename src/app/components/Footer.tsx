@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook } from 'lucide-react';
+import { Mail, MapPin, Linkedin, Twitter, Facebook } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { services } from '../data/services';
 
@@ -75,15 +75,9 @@ export function Footer() {
             <h3 className="text-white text-xl font-semibold mb-6">Contact Info</h3>
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <Phone size={20} className="text-[var(--brand-green)]" />
-                <a href="tel:+1234567890" className="hover:text-[var(--brand-green)] transition-colors duration-300">
-                  +1 832 937 7277
-                </a>
-              </div>
-              <div className="flex items-center gap-3">
                 <Mail size={20} className="text-[var(--brand-green)]" />
-                <a href="mailto:info@vulbright.com" className="hover:text-[var(--brand-green)] transition-colors duration-300">
-                  info@vulbright.com
+                <a href="mailto:contact@vulbright.com" className="hover:text-[var(--brand-green)] transition-colors duration-300">
+                  contact@vulbright.com
                 </a>
               </div>
               <div className="flex gap-4 mt-6">

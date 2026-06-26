@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Send, Mail, Phone, MapPin } from 'lucide-react';
+import { Send, Mail, MapPin } from 'lucide-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 
@@ -102,16 +102,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Email</h4>
-                    <p className="text-white font-medium">info@vulbright.com</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="shrink-0 w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center">
-                    <Phone size={18} className="text-emerald-400" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Phone</h4>
-                    <p className="text-white font-medium">+1 832 937 7277</p>
+                    <p className="text-white font-medium">contact@vulbright.com</p>
                   </div>
                 </div>
                 <div className="pt-6 border-t border-slate-700/60">

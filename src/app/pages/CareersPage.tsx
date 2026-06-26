@@ -18,7 +18,7 @@ interface Job {
 }
 
 const hiringSteps = [
-  { step: '01', title: 'Apply Online', description: 'Submit your resume via our contact form or email careers@vulbright.com. No lengthy cover letter required.' },
+  { step: '01', title: 'Apply Online', description: 'Submit your resume via our contact form or email contact@vulbright.com. No lengthy cover letter required.' },
   { step: '02', title: 'Initial Screening', description: 'A 30-minute call with our recruiting team to learn about your background and walk you through the role and team.' },
   { step: '03', title: 'Technical Interview', description: 'A focused 60-minute session with the hiring team. We assess real-world skills, not trivia — expect practical problems.' },
   { step: '04', title: 'Final Interview', description: 'Meet broader team members and leadership. We want to ensure the fit is right for both sides before moving forward.' },
