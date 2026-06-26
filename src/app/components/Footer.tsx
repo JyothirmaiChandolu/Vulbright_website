@@ -66,7 +66,7 @@ export function Footer() {
             <div className="space-y-4">
               <div className="flex items-start gap-2">
                 <MapPin size={18} className="text-[var(--brand-green)] flex-shrink-0 mt-1" />
-                <p className="text-sm">Spring, Texas, USA</p>
+                <p className="text-sm">The Woodlands, Texas, USA</p>
               </div>
             </div>
           </div>

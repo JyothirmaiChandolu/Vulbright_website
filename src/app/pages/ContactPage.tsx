@@ -4,8 +4,8 @@ import { Send, Mail, MapPin } from 'lucide-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 
-const OFFICE_ADDRESS = '20008 Champion Forest Dr, Ste 403, Spring, Texas 77379-8695';
-const MAPS_QUERY = '20008+Champion+Forest+Dr,+Ste+403,+Spring,+TX+77379';
+const OFFICE_ADDRESS = '9595 Six Pines Dr, STE 8210, The Woodlands, Texas 77380';
+const MAPS_QUERY = '9595+Six+Pines+Dr,+STE+8210,+The+Woodlands,+TX+77380';
 
 function OfficeMap() {
   return (
