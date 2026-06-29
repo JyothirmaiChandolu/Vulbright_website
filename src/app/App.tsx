@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router';
+import { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import Home from './pages/Home';
@@ -20,6 +21,12 @@ function HomeLayout() {
 }
 
 export default function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    (window as any).gtag?.('config', 'G-GCPPYDPRGH', { page_path: location.pathname });
+  }, [location]);
+
   return (
     <>
     <ScrollToTop />
