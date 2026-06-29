@@ -24,7 +24,7 @@ export default function App() {
   const location = useLocation();
 
   useEffect(() => {
-    (window as any).gtag?.('config', 'G-GCPPYDPRGH', { page_path: location.pathname });
+    (window as any).gtag?.('config', 'G-Y99JRS3CWH', { page_path: location.pathname });
   }, [location]);
 
   return (
