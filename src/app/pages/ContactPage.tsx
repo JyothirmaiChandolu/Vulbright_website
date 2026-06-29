@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
+import { SEO } from '../components/SEO';
 import { Send, Mail, MapPin } from 'lucide-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
@@ -54,6 +55,11 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-white relative">
+      <SEO
+        title="Contact Us | Vulbright"
+        description="Contact Vulbright's technology consulting team at contact@vulbright.com. Office: 9595 Six Pines Dr, STE 8210, The Woodlands, Texas 77380."
+        canonical="/contact"
+      />
       <Header />
 
       {/* Hero */}

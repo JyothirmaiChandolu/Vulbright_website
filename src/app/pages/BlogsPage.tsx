@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'motion/react';
+import { SEO } from '../components/SEO';
 import { Calendar, Clock, ArrowRight, ChevronUp } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Header } from '../components/Header';
@@ -297,6 +298,11 @@ export default function BlogsPage() {
 
   return (
     <div className="min-h-screen bg-white relative">
+      <SEO
+        title="Insights & Blog | Vulbright"
+        description="Read the latest insights on cloud, AI, data engineering, and digital transformation from Vulbright's technology experts."
+        canonical="/blogs"
+      />
       <Header />
 
       {/* Hero */}

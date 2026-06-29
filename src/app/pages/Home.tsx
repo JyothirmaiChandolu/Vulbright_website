@@ -7,6 +7,7 @@ import { ServiceCard } from '../components/ServiceCard';
 import { IndustrySliderImproved } from '../components/IndustrySliderImproved';
 import { AnimatedTitle } from '../components/AnimatedTitle';
 import { services } from '../data/services';
+import { SEO } from '../components/SEO';
 
 export default function Home() {
   const [activeService, setActiveService] = useState(0);
@@ -14,6 +15,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEO
+        title="Vulbright | Technology Consulting & Digital Transformation"
+        description="Vulbright delivers enterprise-grade cloud solutions, AI & machine learning, data engineering, and digital transformation consulting. Based in The Woodlands, Texas."
+        canonical="/"
+      />
       <section id="home" className="min-h-screen pt-16 lg:pt-28 relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-green-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[calc(100vh-200px)]">

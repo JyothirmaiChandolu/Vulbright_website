@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { SEO } from '../components/SEO';
 import { MapPin, Clock, Briefcase, ChevronDown, ChevronUp, ArrowRight, X, Upload, CheckCircle } from 'lucide-react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
@@ -416,6 +417,11 @@ export default function CareersPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEO
+        title="Careers | Vulbright"
+        description="Join Vulbright. We're hiring cloud architects, ML engineers, data engineers, software developers, and digital transformation consultants."
+        canonical="/careers"
+      />
       <Header />
 
       {/* Hero */}

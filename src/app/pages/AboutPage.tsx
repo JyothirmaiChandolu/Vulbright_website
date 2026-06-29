@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { SEO } from '../components/SEO';
 import { ChevronLeft, ChevronRight, Lightbulb, Star, Shield, Users, Zap, Globe, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Header } from '../components/Header';
@@ -371,6 +372,11 @@ export default function AboutPage() {
   const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-white relative">
+      <SEO
+        title="About Us | Vulbright Technology Consulting"
+        description="Learn about Vulbright's mission, story, and team. We're a technology consulting firm driving enterprise digital transformation from The Woodlands, Texas."
+        canonical="/about"
+      />
       <Header />
 
       {/* Hero + Our Story */}

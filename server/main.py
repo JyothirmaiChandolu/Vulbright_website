@@ -24,21 +24,11 @@ def root():
 def favicon():
     return Response(status_code=204)
 
-ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://localhost:5175",
-    "http://localhost:5176",
-    "http://localhost:5177",
-    "https://vulbright-website.vercel.app",
-    "https://main.dfy4lade91bhr.amplifyapp.com",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_methods=["POST", "GET"],
-    allow_headers=["Content-Type"],
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "")

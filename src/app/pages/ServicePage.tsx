@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
+import { SEO } from '../components/SEO';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, CheckCircle, ArrowRight, ChevronDown, Wrench } from 'lucide-react';
 
@@ -186,6 +187,12 @@ export default function ServicePage() {
 
   return (
     <div className="min-h-screen bg-white relative">
+      <SEO
+        title={`${service.title} | Vulbright`}
+        description={service.description}
+        canonical={`/services/${service.id}`}
+        ogImage={service.bgImage}
+      />
       <div className="relative z-10">
       <Header />
 
