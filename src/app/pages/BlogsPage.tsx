@@ -85,6 +85,7 @@ function BlogCard({
         Image fades out simultaneously — eye follows the fade, not the reflow.
       */}
       <div
+        className="blog-card-inner"
         style={{
           display: 'grid',
           gridTemplateColumns: isExpanded ? '1fr 0fr' : '1fr 1fr',
@@ -94,7 +95,7 @@ function BlogCard({
       >
 
         {/* Content column — min-width:0 lets the grid track shrink past content */}
-        <div className="p-10 lg:p-14 flex flex-col" style={{ minWidth: 0 }}>
+        <div className="p-6 md:p-10 lg:p-14 flex flex-col" style={{ minWidth: 0 }}>
 
           <div style={{
             opacity: textVisible ? 1 : 0,
